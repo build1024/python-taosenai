@@ -5,17 +5,15 @@
 
 # 動作環境
 ## OS
-- Linux：CentOS 6で動作確認
-- Windows (cygwin)：Windows 8.1で動作確認
+- Linux：CentOS 7.6で動作確認
+- Windows (cygwin)：Windows 10 (1803) 64ビット版で動作確認
 
 ## 必要なプログラム
-- gcc/g++：ただし古いバージョンのOpenFstライブラリを使っているため、4.8以降だと動きません。ライブラリバージョンアップを検討中です。
-- Python 2.7：Python 3系に移行予定です。
+- GCC (gcc/g++)：v4.8.5, 7.4.0で動作確認
+- Python 2.7：python-devパッケージが必要です。サポート期限が2020/1/1に迫っているため、Python 3系に移行予定です。
 
 # インストール
-setup.sh を実行します。以下が実行されます。
-- OpenFst (1.3.4) のビルド
-- pyfstのビルド
+setup.sh を実行すると、[OpenFst](http://www.openfst.org/) (1.6.9) のダウンロード・ビルドが実行されます。
 
 # サンプル
 <del>sampleディレクトリ内で ./exec.py を実行してください。</del>
