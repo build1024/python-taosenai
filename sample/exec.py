@@ -15,12 +15,12 @@ import taosenai
 
 class TaosenaiPlayingImpl(taosenai.TaosenaiPlaying):
     # 置換ペナルティテーブル
-    if os.path.exists("modeldir") and set(os.listdir("modeldir")) >= set(["dist", "syms"]):
-       penalty_table = taosenai.PenaltyTable("modeldir")
+    if os.path.exists("model.tmp"):
+       penalty_table = taosenai.PenaltyTable("model.tmp")
     else:
         # キャッシュがないときは、作りなおす
         penalty_table = taosenai.PenaltyTable()
-        penalty_table.write("modeldir")
+        penalty_table.write("model.tmp")
 
     def __init__(self, vocab_input):
         taosenai.TaosenaiPlaying.__init__(self, self.penalty_table, vocab_input)

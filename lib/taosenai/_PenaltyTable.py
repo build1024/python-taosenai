@@ -4,13 +4,13 @@ import os
 import itertools
 import gzip
 import sys
-import pickle
+import cPickle
 
 import pywrapfst as fst
 
 class PenaltyTable:
-    def __init__(self, indir=None):
-        if indir is None:
+    def __init__(self, fname=None):
+        if fname is None:
             vowels = set(["a", "i", "u", "e", "o"])
             semi_vowels = set(["a", "i", "u", "e", "o", "y", "N"])
             symfile = os.path.dirname(__file__) + "/../model/phoneme.txt"
@@ -37,19 +37,15 @@ class PenaltyTable:
                     if not (p in vowels and q == None):
                         self.penalty_table[(symbols[p], symbols[q])] = dist
         else:
-            with open(indir + "/dist", "rb") as fr:
-                self.penalty_table = pickle.load(fr)
-            with open(indir + "/syms", "rb") as fr:
-                self.syms = pickle.load(fr)
+            with open(fname, "rb") as fr:
+                self.penalty_table = cPickle.load(fr)
+                self.syms = cPickle.load(fr)
         self.generate_fst()
 
-    def write(self, outdir):
-        if not os.path.exists(outdir):
-            os.makedirs(outdir)
-        with open(outdir + "/dist", "wb") as fw:
-            pickle.dump(self.penalty_table, fw)
-        with open(outdir + "/syms", "wb") as fw:
-            pickle.dump(self.syms, fw)
+    def write(self, fname):
+        with open(fname, "wb") as fw:
+            cPickle.dump(self.penalty_table, fw, cPickle.HIGHEST_PROTOCOL)
+            cPickle.dump(self.syms, fw, cPickle.HIGHEST_PROTOCOL)
 
     def generate_fst(self):
         self.fst_penalty = fst.Fst()
