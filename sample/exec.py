@@ -8,16 +8,15 @@ import collections
 import operator
 import time
 
-#import ctypes
-#ctypes.cdll.LoadLibrary("../local/lib/libfst.so")
 sys.path.append("../lib")
 sys.path.append("../local/lib/python2.7/site-packages")
+os.environ["PATH"] = os.environ.get("PATH", "") + ":../local/bin" # for cygwin
 import taosenai
 
 class TaosenaiPlayingImpl(taosenai.TaosenaiPlaying):
     # 置換ペナルティテーブル
-    if os.path.exists("modeldir") and set(os.listdir("modeldir")) >= set(["fst", "isyms", "osyms"]):
-        penalty_table = taosenai.PenaltyTable("modeldir")
+    if os.path.exists("modeldir") and set(os.listdir("modeldir")) >= set(["fst", "syms"]):
+       penalty_table = taosenai.PenaltyTable("modeldir")
     else:
         # キャッシュがないときは、作りなおす
         penalty_table = taosenai.PenaltyTable()
