@@ -14,10 +14,7 @@ class PenaltyTable:
             vowels = set(["a", "i", "u", "e", "o"])
             semi_vowels = set(["a", "i", "u", "e", "o", "y", "N"])
             symfile = os.path.dirname(__file__) + "/../model/phoneme.txt"
-            self.fst_penalty = fst.Fst()
-            s = self.fst_penalty.add_state()
-            self.fst_penalty.set_start(s)
-            self.fst_penalty.set_final(s)
+            self.penalty_table = {}
 
             # シンボル（音素）読み込み
             with open(symfile, "r") as fsym:
@@ -38,17 +35,27 @@ class PenaltyTable:
                         dist *= 5.0
                     # 母音抜かしを認めない
                     if not (p in vowels and q == None):
-                        self.fst_penalty.add_arc(s, fst.Arc(symbols[p], symbols[q], fst.Weight(self.fst_penalty.weight_type(), dist), s))
-
-            self.fst_penalty.arcsort(sort_type="olabel")
+                        self.penalty_table[(symbols[p], symbols[q])] = dist
         else:
-            self.fst_penalty = fst.Fst.read(indir + "/fst")
+            with open(indir + "/dist", "rb") as fr:
+                self.penalty_table = pickle.load(fr)
             with open(indir + "/syms", "rb") as fr:
                 self.syms = pickle.load(fr)
+        self.generate_fst()
 
     def write(self, outdir):
         if not os.path.exists(outdir):
             os.makedirs(outdir)
-        self.fst_penalty.write(outdir + "/fst")
+        with open(outdir + "/dist", "wb") as fw:
+            pickle.dump(self.penalty_table, fw)
         with open(outdir + "/syms", "wb") as fw:
             pickle.dump(self.syms, fw)
+
+    def generate_fst(self):
+        self.fst_penalty = fst.Fst()
+        s = self.fst_penalty.add_state()
+        self.fst_penalty.set_start(s)
+        self.fst_penalty.set_final(s)
+        for (p, q), dist in self.penalty_table.iteritems():
+            self.fst_penalty.add_arc(s, fst.Arc(p, q, fst.Weight(self.fst_penalty.weight_type(), dist), s))
+        self.fst_penalty.arcsort(sort_type="olabel")

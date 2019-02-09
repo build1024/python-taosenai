@@ -15,7 +15,7 @@ import taosenai
 
 class TaosenaiPlayingImpl(taosenai.TaosenaiPlaying):
     # 置換ペナルティテーブル
-    if os.path.exists("modeldir") and set(os.listdir("modeldir")) >= set(["fst", "syms"]):
+    if os.path.exists("modeldir") and set(os.listdir("modeldir")) >= set(["dist", "syms"]):
        penalty_table = taosenai.PenaltyTable("modeldir")
     else:
         # キャッシュがないときは、作りなおす
