@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import collections
 import pywrapfst as fst
 import _tophones
 from _Vocabulary import Vocabulary
 
-# Python 2.6+
-ResultTuple = collections.namedtuple("ResultTuple", ["info"])
 class TaosenaiPlaying:
     def __init__(self, penalty, vocab_list):
         self.penalty = penalty
@@ -59,8 +56,8 @@ class TaosenaiPlaying:
                         sorted(enumerate(self.vocab.phonemes2vocab[t]),
                                key=lambda entry: self.key_func(entry[1].info))[0]
                     # 確定した単語を返す
-                    self.selected(selected_entry.info)
-                    ret.append(ResultTuple(info=selected_entry.info))
+                    self.selected(selected_entry)
+                    ret.append(selected_entry)
                     input_phones += list(t)
                     symbuf = []
                 else:
