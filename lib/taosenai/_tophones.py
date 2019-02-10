@@ -48,13 +48,12 @@ for k, h in katakana2hiragana.iteritems():
     hiragana2katakana[h] = k
        
 # 読みから音素列への変換
-def tophones(s, autopron=True, charset="UTF-8"):
+def tophones(s, autopron=True):
     beg = True
-    uni = s.decode(charset)
     phones = []
 
     # 変換
-    for ch in uni:
+    for ch in s:
         # ひらがな→カタカナ変換
         if ch in hiragana2katakana:
             ch = hiragana2katakana[ch]
