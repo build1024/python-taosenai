@@ -4,9 +4,14 @@ import os
 import itertools
 import gzip
 import sys
-import cPickle
 
-import pywrapfst as fst
+PY3 = sys.version_info[0] == 3
+if PY3:
+    import pickle
+else:
+    import cPickle as pickle
+
+from . import pywrapfst as fst
 
 class PenaltyTable:
     def __init__(self, fname=None):
@@ -38,20 +43,20 @@ class PenaltyTable:
                         self.penalty_table[(symbols[p], symbols[q])] = dist
         else:
             with open(fname, "rb") as fr:
-                self.penalty_table = cPickle.load(fr)
-                self.syms = cPickle.load(fr)
+                self.penalty_table = pickle.load(fr)
+                self.syms = pickle.load(fr)
         self.generate_fst()
 
     def write(self, fname):
         with open(fname, "wb") as fw:
-            cPickle.dump(self.penalty_table, fw, cPickle.HIGHEST_PROTOCOL)
-            cPickle.dump(self.syms, fw, cPickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.penalty_table, fw, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.syms, fw, pickle.HIGHEST_PROTOCOL)
 
     def generate_fst(self):
         self.fst_penalty = fst.Fst()
         s = self.fst_penalty.add_state()
         self.fst_penalty.set_start(s)
         self.fst_penalty.set_final(s)
-        for (p, q), dist in self.penalty_table.iteritems():
+        for (p, q), dist in (self.penalty_table.items() if PY3 else self.penalty_table.iteritems()):
             self.fst_penalty.add_arc(s, fst.Arc(p, q, fst.Weight(self.fst_penalty.weight_type(), dist), s))
         self.fst_penalty.arcsort(sort_type="olabel")

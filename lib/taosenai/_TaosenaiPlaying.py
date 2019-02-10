@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 
-import pywrapfst as fst
-import _tophones
-from _Vocabulary import Vocabulary
+from __future__ import print_function
+import sys
+from . import pywrapfst as fst
+from . import _tophones
+from ._Vocabulary import Vocabulary
+
+PY3 = sys.version_info[0] == 3
 
 class TaosenaiPlaying:
     def __init__(self, penalty, vocab_list):
         self.penalty = penalty
         self.symbols = penalty.syms
-        self.symbols_rev = dict((j, i) for (i, j) in self.symbols.iteritems())
+        if PY3:
+            self.symbols_rev = dict((j, i) for (i, j) in self.symbols.items())
+        else:
+            self.symbols_rev = dict((j, i) for (i, j) in self.symbols.iteritems())
         self.symbols_rev[1] = u"|"
         self.vocab = Vocabulary(self.symbols, vocab_list)
 
@@ -108,5 +115,5 @@ class TaosenaiPlaying:
             if arc.ilabel != 0 or arc.olabel != 0:
                 isym = self.symbols_rev[arc.ilabel]
                 osym = self.symbols_rev[arc.olabel]
-                print "{0}\t{1}".format(isym, osym)
+                print("{0}\t{1}".format(isym, osym))
             state = arc.nextstate

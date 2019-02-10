@@ -2,12 +2,13 @@
 
 import collections
 import itertools
+import sys
 
-import pywrapfst as fst
+from . import pywrapfst as fst
+from . import _tophones
 
-import _tophones
+PY3 = sys.version_info[0] == 3
 
-# Python 2.6+
 VocabTuple = collections.namedtuple("VocabTuple", ["kana", "info"])
 class Vocabulary:
     delimiter = "|"
@@ -54,7 +55,7 @@ class Vocabulary:
     def generate(self):
         # FST作成
         self.init_fst_vocab()
-        for phonemes, lst in self.phonemes2vocab.iteritems():
+        for phonemes, lst in (self.phonemes2vocab.items() if PY3 else self.phonemes2vocab.iteritems()):
             # 枝を追加する
             self.insert_word(phonemes, 0, 0)
         self.optimize()
