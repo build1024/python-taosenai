@@ -13,14 +13,14 @@ class PenaltyTable:
         if fname is None:
             vowels = set(["a", "i", "u", "e", "o"])
             semi_vowels = set(["a", "i", "u", "e", "o", "y", "N"])
-            symfile = os.path.dirname(__file__) + "/../model/phoneme.txt"
-            self.penalty_table = {}
-
-            # シンボル（音素）読み込み
-            with open(symfile, "r") as fsym:
-                symbols = dict((x.rstrip(), i) for i, x in enumerate(fsym, 2))
-                symbols[None] = 0 # Epsilon
+            symbols = dict((x, i) for i, x in enumerate([
+                'a', 'i', 'u', 'e', 'o', 'k', 'ky', 's', 'sh', 't', 'ts', 'ch',
+                'n', 'ny', 'h', 'hy', 'f', 'm', 'my', 'y', 'r', 'ry', 'w', 'g',
+                'gy', 'z', 'j', 'd', 'b', 'by', 'p', 'py', 'N', 'q', 'sp'
+            ], 2))
+            symbols[None] = 0 # reserved for Epsilon
             self.syms = symbols
+            self.penalty_table = {}
 
             # 音素間の類似度を求める, KL Divergence
             for t in itertools.combinations_with_replacement(symbols.keys(), 2):
