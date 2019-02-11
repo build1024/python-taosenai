@@ -13,7 +13,11 @@
 - Python 2.7：python-devパッケージが必要です。サポート期限が2020/1/1に迫っているため、Python 3系に移行予定です。
 
 # インストール
-setup.sh を実行すると、[OpenFst](http://www.openfst.org/) (1.6.9) のダウンロード・ビルドが実行されます。
+
+```
+python setup.py build
+python setup.py install
+```
 
 # サンプル
 sampleディレクトリ内で ./exec.py を実行してください。

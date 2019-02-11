@@ -1,13 +1,9 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import sys
 import os
 import codecs
-
-sys.path.append("../lib")
-sys.path.append("../local/lib/python2.7/site-packages")
-os.environ["PATH"] = os.environ.get("PATH", "") + ":../local/bin" # for cygwin
 import taosenai
 
 class TaosenaiPlayingImpl(taosenai.TaosenaiPlaying):
