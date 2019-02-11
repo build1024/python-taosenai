@@ -128,7 +128,6 @@ setup(
     author='hira',
     description='A "soramimi"-generation library for Python.',
     packages=['taosenai'],
-    package_dir={'': 'lib'},
     ext_modules=[OpenFstExtension()],
     cmdclass=dict(build_ext=OpenFstBuild),
     setup_requires=["requests"]
