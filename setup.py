@@ -82,6 +82,8 @@ class OpenFstBuild(build_ext):
         if not os.path.exists(self.openfst_dirname):
             extract_cmd = ["tar", "xzf", self.openfst_filename, "-C", self.build_temp]
             subprocess.check_call(extract_cmd)
+            patch_cmd = ["patch", "-p1", os.path.join(self.openfst_dirname, "configure"), "openfst-1.6.9.patch"]
+            subprocess.check_call(patch_cmd)
 
     def openfst_configure_and_make(self):
         if not os.path.exists(self.openfst_main_lib):
@@ -90,6 +92,7 @@ class OpenFstBuild(build_ext):
             if os.path.exists("Makefile"):
                 subprocess.check_call(["make", "distclean"])
             os.environ.update({
+                "PYTHON":   sys.executable,
                 "CFLAGS":   "-O2",
                 "CXXFLAGS": "-O2"
             })

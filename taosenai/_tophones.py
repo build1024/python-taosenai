@@ -2,6 +2,8 @@
 
 import sys
 
+PY3 = sys.version_info[0] == 3
+
 # 対応表
 katakana2hiragana = {
         u'ア':u'あ', u'イ':u'い', u'ウ':u'う', u'エ':u'え', u'オ':u'お',
@@ -43,9 +45,10 @@ dic = {u"ア": "a"  , u"イ": "i"  , u"ウ": "u"  , u"エ": "e"  , u"オ": "o"  
        u"ワ": "w a", u"ヲ": "o",   u"ン": "N",
        u"ッ": "q"}
 
-hiragana2katakana = {}
-for k, h in katakana2hiragana.iteritems():
-    hiragana2katakana[h] = k
+if PY3:
+    hiragana2katakana = dict((h, k) for k, h in katakana2hiragana.items())
+else:
+    hiragana2katakana = dict((h, k) for k, h in katakana2hiragana.iteritems())
        
 # 読みから音素列への変換
 def tophones(s, autopron=True):

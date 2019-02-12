@@ -10,7 +10,7 @@
 
 ## 必要なプログラム
 - GCC (gcc/g++)：v4.8.5, 7.4.0で動作確認
-- Python 2.7：python-devパッケージが必要です。サポート期限が2020/1/1に迫っているため、Python 3系に移行予定です。
+- Python 2.7以降：2.7.14, 3.6.4で動作確認。python-devパッケージが必要です。
 
 # インストール
 
@@ -18,6 +18,8 @@
 python setup.py build
 python setup.py install
 ```
+
+複数のバージョンのPythonがインストールされている環境の場合、インストールしたい環境のPythonで ``setup.py`` を実行することで、特定のバージョンのPythonに合わせてOpenFstをビルドすることができます。
 
 # サンプル
 sampleディレクトリ内で ./exec.py を実行してください。
