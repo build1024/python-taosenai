@@ -5,18 +5,25 @@
 
 # 動作環境
 ## OS
-- Linux：CentOS 6で動作確認
-- Windows (cygwin)：Windows 8.1で動作確認
+- Linux：CentOS 7.6で動作確認
+- FreeBSD：11.2で動作確認
+- Windows (cygwin)：Windows 10 (1803) 64ビット版で動作確認
 
 ## 必要なプログラム
-- gcc/g++：ただし古いバージョンのOpenFstライブラリを使っているため、4.8以降だと動きません。ライブラリバージョンアップを検討中です。
-- Python 2.7：Python 3系に移行予定です。
+- GCC (gcc/g++)：v4.7以降が必要です（OpenFstの動作環境に準じます）。v4.8.5, 7.3.0, 7.4.0で動作確認しました。
+- Python：2.7系または3系が必要です。v2.7.14, 2.7.15, 3.6.4で動作確認しました。
+  - [Requests](https://requests-docs-ja.readthedocs.io/en/latest/)モジュールが必要です。
+  - 開発用ライブラリが必要です。yum, apt-getなどをご利用の場合、python-dev, python-develといった名前のパッケージを別途インストールしなければならない場合があります。
 
 # インストール
-setup.sh を実行します。以下が実行されます。
-- OpenFst (1.3.4) のビルド
-- pyfstのビルド
+
+```
+python setup.py build
+python setup.py install
+```
+
+複数のバージョンのPythonがインストールされている環境の場合、インストールしたい環境のPythonで ``setup.py`` を実行することで、特定のバージョンのPythonに合わせてOpenFstをビルドすることができます。
 
 # サンプル
-<del>sampleディレクトリ内で ./exec.py を実行してください。</del>
-サンプルデータ（単語リスト）を準備できていないため、現時点では動作しません。
+sampleディレクトリ内で ./exec.py を実行してください。
+サンプルデータ（単語リスト）として、総務省「全国地方公共団体コード」の[「都道府県コード及び市区町村コード」（平成30年10月1日現在）](http://www.soumu.go.jp/denshijiti/code.html)を加工して使用しました。
