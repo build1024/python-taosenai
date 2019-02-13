@@ -80,6 +80,8 @@ class OpenFstBuild(build_ext):
 
     def openfst_extract(self):
         if not os.path.exists(self.openfst_dirname):
+            self.check_command_existence("tar")
+            self.check_command_existence("patch")
             extract_cmd = ["tar", "xzf", self.openfst_filename, "-C", self.build_temp]
             subprocess.check_call(extract_cmd)
             patch_cmd = ["patch", "-p1", os.path.join(self.openfst_dirname, "configure"), "openfst-1.6.9.patch"]
@@ -87,6 +89,7 @@ class OpenFstBuild(build_ext):
 
     def openfst_configure_and_make(self):
         if not os.path.exists(self.openfst_main_lib):
+            self.check_command_existence("make")
             old_dir = os.getcwd()
             os.chdir(self.openfst_dirname)
             if os.path.exists("Makefile"):
@@ -114,6 +117,16 @@ class OpenFstBuild(build_ext):
         for src in self.openfst_deps_libs:
             dst = "%s/%s" % (self.output_dir, os.path.basename(src))
             copy(src, dst)
+
+    @staticmethod
+    def check_command_existence(cmdname):
+        with open(os.devnull, "w") as fwnull:
+            try:
+                subprocess.call([cmdname, "--version"], stdout=fwnull, stderr=fwnull)
+            except OSError as ex:
+                # add error message (for Python 2.7)
+                ex.filename = cmdname
+                raise ex
 
     def run(self):
         self.openfst_download()
