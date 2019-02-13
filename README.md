@@ -12,8 +12,8 @@
 ## 必要なプログラム
 - GCC (gcc/g++)：v4.7以降が必要です（OpenFstの動作環境に準じます）。v4.8.5, 7.3.0, 7.4.0で動作確認しました。
 - Python：2.7系または3系が必要です。v2.7.14, 2.7.15, 3.6.4で動作確認しました。
--- [Requests](https://requests-docs-ja.readthedocs.io/en/latest/)モジュールが必要です。
--- 開発用ライブラリが必要です。yum, apt-getなどをご利用の場合、python-dev, python-develといった名前のパッケージを別途インストールしなければならない場合があります。
+  - [Requests](https://requests-docs-ja.readthedocs.io/en/latest/)モジュールが必要です。
+  - 開発用ライブラリが必要です。yum, apt-getなどをご利用の場合、python-dev, python-develといった名前のパッケージを別途インストールしなければならない場合があります。
 
 # インストール
 
