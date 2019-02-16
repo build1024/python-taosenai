@@ -21,7 +21,7 @@ class PenaltyTable:
             symbols = dict((x, i) for i, x in enumerate([
                 'a', 'i', 'u', 'e', 'o', 'k', 'ky', 's', 'sh', 't', 'ts', 'ch',
                 'n', 'ny', 'h', 'hy', 'f', 'm', 'my', 'y', 'r', 'ry', 'w', 'g',
-                'gy', 'z', 'j', 'd', 'b', 'by', 'p', 'py', 'N', 'q', 'sp'
+                'gy', 'z', 'j', 'd', 'b', 'by', 'p', 'py', 'N', 'q'
             ], 2))
             symbols[None] = 0 # reserved for Epsilon
             self.syms = symbols
@@ -33,8 +33,6 @@ class PenaltyTable:
                     continue
                 for p, q in [(t[0], t[1]), (t[1], t[0])]:
                     dist = (0.0 if p == q else 1.0)
-                    if p == "sp": p = None
-                    if q == "sp": q = None
                     # 母音が合わない場合はペナルティを増やす
                     if (p in semi_vowels or q in semi_vowels) and (p != q):
                         dist *= 5.0
