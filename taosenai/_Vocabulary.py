@@ -12,11 +12,11 @@ PY3 = sys.version_info[0] == 3
 VocabTuple = collections.namedtuple("VocabTuple", ["kana", "info"])
 class Vocabulary:
     delimiter = "|"
-    ws_penalty = 4.0
 
-    def __init__(self, syms, vocab_list):
+    def __init__(self, syms, vocab_list, ws_penalty):
         self.syms = dict(syms)
         self.syms[self.delimiter] = 1
+        self.ws_penalty = ws_penalty
 
         # 単語登録
         self.phonemes2vocab = collections.defaultdict(list)

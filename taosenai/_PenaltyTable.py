@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os
-import itertools
-import gzip
 import sys
+import itertools
+import math
+
+from . import pywrapfst as fst
 
 PY3 = sys.version_info[0] == 3
 if PY3:
@@ -11,44 +12,34 @@ if PY3:
 else:
     import cPickle as pickle
 
-from . import pywrapfst as fst
-
 class PenaltyTable:
-    def __init__(self, fname=None):
-        if fname is None:
-            vowels = set(["a", "i", "u", "e", "o"])
-            semi_vowels = set(["a", "i", "u", "e", "o", "y", "N"])
-            symbols = dict((x, i) for i, x in enumerate([
-                'a', 'i', 'u', 'e', 'o', 'k', 'ky', 's', 'sh', 't', 'ts', 'ch',
-                'n', 'ny', 'h', 'hy', 'f', 'm', 'my', 'y', 'r', 'ry', 'w', 'g',
-                'gy', 'z', 'j', 'd', 'b', 'by', 'p', 'py', 'N', 'q'
-            ], 2))
-            symbols[None] = 0 # reserved for Epsilon
-            self.syms = symbols
-            self.penalty_table = {}
+    symbols = dict((x, i) for i, x in enumerate([
+        'a', 'i', 'u', 'e', 'o', 'k', 'ky', 's', 'sh', 't', 'ts', 'ch',
+        'n', 'ny', 'h', 'hy', 'f', 'm', 'my', 'y', 'r', 'ry', 'w', 'g',
+        'gy', 'z', 'j', 'd', 'b', 'by', 'p', 'py', 'N', 'q'
+    ], 2))
+    symbols[None] = 0 # reserved for Epsilon
 
-            # 音素間の類似度を求める, KL Divergence
-            for t in itertools.combinations_with_replacement(symbols.keys(), 2):
-                if t[0] is None or t[1] is None:
-                    continue
-                for p, q in [(t[0], t[1]), (t[1], t[0])]:
-                    dist = (0.0 if p == q else 1.0)
-                    # 母音が合わない場合はペナルティを増やす
-                    if (p in semi_vowels or q in semi_vowels) and (p != q):
-                        dist *= 5.0
-                    # 母音抜かしを認めない
-                    if not (p in vowels and q == None):
-                        self.penalty_table[(symbols[p], symbols[q])] = dist
-        else:
-            with open(fname, "rb") as fr:
-                self.penalty_table = pickle.load(fr)
-                self.syms = pickle.load(fr)
+    def __init__(self):
+        self.syms = PenaltyTable.symbols
+        self.penalty_table = {}
+
+        # 音素間の類似度を求める
+        for t in itertools.product(self.syms.keys(), repeat=2):
+            if not (t[0] is None and t[1] is None):
+                dist = self.sim(t[0], t[1])
+                if not (dist is None or math.isinf(dist)):
+                    self.penalty_table[(self.syms[t[0]], self.syms[t[1]])] = dist
         self.generate_fst()
 
-    def write(self, fname):
-        with open(fname, "wb") as fw:
-            pickle.dump(self.penalty_table, fw, pickle.HIGHEST_PROTOCOL)
-            pickle.dump(self.syms, fw, pickle.HIGHEST_PROTOCOL)
+    # 入力音素p, 出力音素q間の非類似度（0以上の実数）を定義する。
+    # オーバーライドして挙動を変更できる。
+    # p, qが <eps> の場合は None が引数に渡される。
+    # inf または None を返してもよい（p->qの変換は棄却される）
+    @classmethod
+    def sim(cls, p, q):
+        # デフォルトで編集距離を返す。
+        return (0.0 if p == q else 1.0)
 
     def generate_fst(self):
         self.fst_penalty = fst.Fst()

@@ -9,15 +9,15 @@ from ._Vocabulary import Vocabulary
 PY3 = sys.version_info[0] == 3
 
 class TaosenaiPlaying:
-    def __init__(self, penalty, vocab_list):
+    def __init__(self, penalty, vocab_list, ws_penalty):
         self.penalty = penalty
         self.symbols = penalty.syms
+        self.symbols[u"|"] = 1
         if PY3:
             self.symbols_rev = dict((j, i) for (i, j) in self.symbols.items())
         else:
             self.symbols_rev = dict((j, i) for (i, j) in self.symbols.iteritems())
-        self.symbols_rev[1] = u"|"
-        self.vocab = Vocabulary(self.symbols, vocab_list)
+        self.vocab = Vocabulary(self.symbols, vocab_list, ws_penalty)
 
     def play(self, kana):
         ret = []
