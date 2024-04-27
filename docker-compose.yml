@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  worker:
+    build: .
+    container_name: taosenai
+    tty: true
