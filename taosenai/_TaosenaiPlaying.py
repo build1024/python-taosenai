@@ -26,13 +26,13 @@ class TaosenaiPlaying:
         flag_done = False
         while not flag_done and len(phones) > 0:
             # 歌詞WFST
-            fst_kashi = fst.Fst()
+            fst_kashi = fst.VectorFst()
             new_st = fst_kashi.add_state()
             fst_kashi.set_start(new_st)
             for ph in phones:
                 old_st = new_st
                 new_st = fst_kashi.add_state()
-                fst_kashi.add_arc(old_st, fst.Arc(self.symbols[ph], self.symbols[ph], fst.Weight.One(fst_kashi.weight_type()), new_st))
+                fst_kashi.add_arc(old_st, fst.Arc(self.symbols[ph], self.symbols[ph], fst.Weight.one(fst_kashi.weight_type()), new_st))
             fst_kashi.set_final(new_st)
             fst_kashi.arcsort(sort_type="olabel")
 
@@ -74,7 +74,7 @@ class TaosenaiPlaying:
 
                 # 次の記号へ
                 state = arc.nextstate
-            if fst_shortest.final(state) != fst.Weight.Zero(fst_shortest.weight_type()):
+            if fst_shortest.final(state) != fst.Weight.zero(fst_shortest.weight_type()):
                 flag_done = True
 
         # スコアを計算しておく

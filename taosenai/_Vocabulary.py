@@ -32,7 +32,7 @@ class Vocabulary:
 
     # FST初期化
     def init_fst_vocab(self):
-        self.fst_vocab = fst.Fst()
+        self.fst_vocab = fst.VectorFst()
         s = self.fst_vocab.add_state()
         self.fst_vocab.set_start(s)
         self.fst_vocab.set_final(s)
@@ -40,11 +40,11 @@ class Vocabulary:
     # FSTに単語（音素列）を追加する
     def insert_word(self, syms, state_from, state_to):
         new_st = self.fst_vocab.add_state()
-        self.fst_vocab.add_arc(state_from, fst.Arc(0, 0, fst.Weight.One(self.fst_vocab.weight_type()), new_st))
+        self.fst_vocab.add_arc(state_from, fst.Arc(0, 0, fst.Weight.one(self.fst_vocab.weight_type()), new_st))
         for s in syms:
             old_st = new_st
             new_st = self.fst_vocab.add_state()
-            self.fst_vocab.add_arc(old_st, fst.Arc(self.syms[s], self.syms[s], fst.Weight.One(self.fst_vocab.weight_type()), new_st))
+            self.fst_vocab.add_arc(old_st, fst.Arc(self.syms[s], self.syms[s], fst.Weight.one(self.fst_vocab.weight_type()), new_st))
         self.fst_vocab.add_arc(new_st, fst.Arc(0, self.syms[self.delimiter], fst.Weight(self.fst_vocab.weight_type(), self.ws_penalty), state_to))
 
     # FSTの最適化

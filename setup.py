@@ -11,7 +11,7 @@ import requests
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
-OPENFST_VERSION = "1.7.4"
+OPENFST_VERSION = "1.7.9"
 
 def copy(src, dst):
     print("copying {} -> {}".format(src, dst))
@@ -50,17 +50,17 @@ class OpenFstBuild(build_ext):
     def openfst_deps_libs(self):
         if sys.platform == "cygwin":
             return [
-                "%s/src/extensions/far/.libs/cygfstfar-17.dll" % self.openfst_dirname,
-                "%s/src/extensions/far/.libs/cygfstfarscript-17.dll" % self.openfst_dirname,
-                "%s/src/script/.libs/cygfstscript-17.dll" % self.openfst_dirname,
-                "%s/src/lib/.libs/cygfst-17.dll" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/cygfstfar-22.dll" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/cygfstfarscript-22.dll" % self.openfst_dirname,
+                "%s/src/script/.libs/cygfstscript-22.dll" % self.openfst_dirname,
+                "%s/src/lib/.libs/cygfst-22.dll" % self.openfst_dirname,
             ]
         else:
             return [
-                "%s/src/extensions/far/.libs/libfstfar.so.17" % self.openfst_dirname,
-                "%s/src/extensions/far/.libs/libfstfarscript.so.17" % self.openfst_dirname,
-                "%s/src/script/.libs/libfstscript.so.17" % self.openfst_dirname,
-                "%s/src/lib/.libs/libfst.so.17" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/libfstfar.so.22" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/libfstfarscript.so.22" % self.openfst_dirname,
+                "%s/src/script/.libs/libfstscript.so.22" % self.openfst_dirname,
+                "%s/src/lib/.libs/libfst.so.22" % self.openfst_dirname,
             ]
 
     @property

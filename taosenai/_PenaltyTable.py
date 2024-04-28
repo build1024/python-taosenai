@@ -42,7 +42,7 @@ class PenaltyTable:
         return (0.0 if p == q else 1.0)
 
     def generate_fst(self):
-        self.fst_penalty = fst.Fst()
+        self.fst_penalty = fst.VectorFst()
         s = self.fst_penalty.add_state()
         self.fst_penalty.set_start(s)
         self.fst_penalty.set_final(s)
