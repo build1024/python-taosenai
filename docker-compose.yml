@@ -5,3 +5,7 @@ services:
     build: .
     container_name: taosenai
     tty: true
+    volumes:
+      - type: bind
+        source: ./sample
+        target: /opt/taosenai/sample
