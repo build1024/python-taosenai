@@ -5,14 +5,14 @@ WORKDIR /opt/taosenai
 COPY sources.list /etc/apt/sources.list
 
 # Install packages
-RUN apt update && apt install -y gcc g++ patch make file python3 python3-dev python3-venv && apt clean
+RUN apt update && apt install -y gcc g++ make file python3 python3-dev python3-venv && apt clean
 
 # Set up Python3 env
 RUN python3 -m venv venv
 RUN bash -c 'source venv/bin/activate; pip install --upgrade pip && pip install requests'
 
 # Copy and build packages
-COPY openfst-1.6.9.patch setup.py .
+COPY setup.py .
 COPY taosenai/ ./taosenai/
 RUN bash -c 'source venv/bin/activate; python setup.py build'
 

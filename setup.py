@@ -11,7 +11,7 @@ import requests
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
 
-OPENFST_VERSION = "1.6.9"
+OPENFST_VERSION = "1.7.4"
 
 def copy(src, dst):
     print("copying {} -> {}".format(src, dst))
@@ -50,17 +50,17 @@ class OpenFstBuild(build_ext):
     def openfst_deps_libs(self):
         if sys.platform == "cygwin":
             return [
-                "%s/src/extensions/far/.libs/cygfstfar-13.dll" % self.openfst_dirname,
-                "%s/src/extensions/far/.libs/cygfstfarscript-13.dll" % self.openfst_dirname,
-                "%s/src/script/.libs/cygfstscript-13.dll" % self.openfst_dirname,
-                "%s/src/lib/.libs/cygfst-13.dll" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/cygfstfar-17.dll" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/cygfstfarscript-17.dll" % self.openfst_dirname,
+                "%s/src/script/.libs/cygfstscript-17.dll" % self.openfst_dirname,
+                "%s/src/lib/.libs/cygfst-17.dll" % self.openfst_dirname,
             ]
         else:
             return [
-                "%s/src/extensions/far/.libs/libfstfar.so.13" % self.openfst_dirname,
-                "%s/src/extensions/far/.libs/libfstfarscript.so.13" % self.openfst_dirname,
-                "%s/src/script/.libs/libfstscript.so.13" % self.openfst_dirname,
-                "%s/src/lib/.libs/libfst.so.13" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/libfstfar.so.17" % self.openfst_dirname,
+                "%s/src/extensions/far/.libs/libfstfarscript.so.17" % self.openfst_dirname,
+                "%s/src/script/.libs/libfstscript.so.17" % self.openfst_dirname,
+                "%s/src/lib/.libs/libfst.so.17" % self.openfst_dirname,
             ]
 
     @property
@@ -81,11 +81,8 @@ class OpenFstBuild(build_ext):
     def openfst_extract(self):
         if not os.path.exists(self.openfst_dirname):
             self.check_command_existence("tar")
-            self.check_command_existence("patch")
             extract_cmd = ["tar", "xzf", self.openfst_filename, "-C", self.build_temp]
             subprocess.check_call(extract_cmd)
-            patch_cmd = ["patch", "-p1", os.path.join(self.openfst_dirname, "configure"), "openfst-1.6.9.patch"]
-            subprocess.check_call(patch_cmd)
 
     def openfst_configure_and_make(self):
         if not os.path.exists(self.openfst_main_lib):
