@@ -136,7 +136,7 @@ class OpenFstBuild(build_ext):
 
 setup(
     name='python-taosenai',
-    version='0.0.1',
+    version='0.1.0',
     url='https://github.com/build1024/python-taosenai',
     author='hira',
     description='A "soramimi"-generation library for Python.',
