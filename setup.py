@@ -107,7 +107,7 @@ class OpenFstBuild(build_ext):
             subprocess.check_call([
                 "make",
                 "-j", str(multiprocessing.cpu_count()),
-                "LDFLAGS=-no-undefined" # to prevent an error on cygwin
+                r"LDFLAGS=-no-undefined -Wl,-rpath,'$$ORIGIN'" # --no-undefined: to prevent an error on cygwin
             ])
             os.chdir(old_dir)
 
